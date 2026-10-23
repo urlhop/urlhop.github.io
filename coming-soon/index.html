@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coming Soon</title>
+<style>
+  :root { --bg: #f7f7f9; --fg: #1d1d22; --muted: #6b6b76; --accent: #3b5bdb; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #121216; --fg: #ededf2; --muted: #9a9aa6; --accent: #7c95ff; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px 16px;
+         background: var(--bg); color: var(--fg); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; text-align: center; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--accent); margin: 0 auto 24px;
+         animation: pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: .35; transform: scale(.85); } 50% { opacity: 1; transform: scale(1.15); } }
+  h1 { margin: 0 0 12px; font-size: clamp(2rem, 7vw, 3.5rem); letter-spacing: -0.02em; }
+  p { margin: 0; color: var(--muted); font-size: 1.1rem; }
+</style>
+</head>
+<body>
+  <main>
+    <div class="dot"></div>
+    <h1>Coming Soon</h1>
+    <p>We're getting something ready. Check back shortly.</p>
+  </main>
+</body>
+</html>

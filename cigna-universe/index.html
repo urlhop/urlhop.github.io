@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Redirecting…</title>
+<script>
+  // ===== CHANGE THE TARGET HERE =====
+  var TARGET = "https://urlhop.github.io/coming-soon/";
+  // ==================================
+  location.replace(TARGET);
+</script>
+<style>
+  body { font-family: system-ui, sans-serif; display: grid; place-items: center; min-height: 100vh; margin: 0; }
+  a { color: #3b5bdb; }
+</style>
+</head>
+<body>
+  <p>Redirecting… <a id="link" href="https://urlhop.github.io/coming-soon/">Click here if nothing happens</a></p>
+  <script>document.getElementById("link").href = TARGET;</script>
+</body>
+</html>
