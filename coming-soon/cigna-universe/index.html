@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cigna Universe · Under Construction</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --space-1: #050816;
+    --space-2: #0d1640;
+    --glow: #5ec8ff;
+    --glow-2: #b28cff;
+    --text: #eef3ff;
+    --muted: #a8b3d6;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: radial-gradient(ellipse at 50% 120%, var(--space-2) 0%, var(--space-1) 60%);
+    color: var(--text);
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    overflow: hidden;
+  }
+  canvas { position: fixed; inset: 0; width: 100%; height: 100%; }
+
+  main {
+    position: relative; z-index: 1;
+    min-height: 100%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 32px 16px; text-align: center;
+  }
+
+  /* Planet being assembled */
+  .system { position: relative; width: 200px; height: 200px; margin-bottom: 36px; }
+  .planet {
+    position: absolute; inset: 50px;
+    border-radius: 50%;
+    background:
+      repeating-linear-gradient(90deg, transparent 0 14px, rgba(255,255,255,.08) 14px 15px),
+      repeating-linear-gradient(0deg, transparent 0 14px, rgba(255,255,255,.08) 14px 15px),
+      radial-gradient(circle at 35% 30%, #8fe3ff, #3a7bd5 55%, #1b2a6b 100%);
+    box-shadow: 0 0 40px rgba(94,200,255,.45), inset -14px -10px 30px rgba(0,0,30,.6);
+    clip-path: inset(0 0 0 0 round 50%);
+    animation: build 6s ease-in-out infinite;
+  }
+  @keyframes build {
+    0%   { clip-path: inset(100% 0 0 0 round 50%); }
+    45%, 70% { clip-path: inset(0 0 0 0 round 50%); }
+    100% { clip-path: inset(100% 0 0 0 round 50%); }
+  }
+  .planet-outline {
+    position: absolute; inset: 50px; border-radius: 50%;
+    border: 2px dashed rgba(94,200,255,.5);
+  }
+  .orbit {
+    position: absolute; inset: 0; border-radius: 50%;
+    border: 1px solid rgba(178,140,255,.35);
+    animation: spin 8s linear infinite;
+  }
+  .orbit.two { inset: 18px; animation-duration: 5s; animation-direction: reverse; border-color: rgba(94,200,255,.3); }
+  .orbit::after {
+    content: ""; position: absolute; top: -6px; left: 50%;
+    width: 12px; height: 12px; margin-left: -6px; border-radius: 50%;
+    background: var(--glow-2); box-shadow: 0 0 14px var(--glow-2);
+  }
+  .orbit.two::after { background: var(--glow); box-shadow: 0 0 14px var(--glow); width: 8px; height: 8px; top: -4px; margin-left: -4px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .badge {
+    display: inline-block; padding: 6px 14px; margin-bottom: 18px;
+    border: 1px solid rgba(94,200,255,.4); border-radius: 999px;
+    color: var(--glow); font-size: .8rem; letter-spacing: .18em; text-transform: uppercase;
+    background: rgba(94,200,255,.08);
+  }
+  h1 {
+    margin: 0 0 14px;
+    font-size: clamp(2.2rem, 8vw, 4.2rem); line-height: 1.05; letter-spacing: -0.02em;
+    background: linear-gradient(90deg, var(--glow), var(--glow-2), var(--glow));
+    background-size: 200% auto;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: shimmer 5s linear infinite;
+  }
+  @keyframes shimmer { to { background-position: 200% center; } }
+  .tagline { margin: 0 0 28px; max-width: 34ch; color: var(--muted); font-size: 1.15rem; line-height: 1.5; }
+
+  .status {
+    width: min(360px, 100%);
+    text-align: left; font-size: .9rem; color: var(--muted);
+  }
+  .status-row { display: flex; justify-content: space-between; margin-bottom: 8px; }
+  #phase { color: var(--text); min-height: 1.3em; }
+  .bar { height: 6px; border-radius: 999px; background: rgba(255,255,255,.1); overflow: hidden; }
+  .fill {
+    height: 100%; width: 0; border-radius: inherit;
+    background: linear-gradient(90deg, var(--glow), var(--glow-2));
+    box-shadow: 0 0 12px var(--glow);
+    transition: width .8s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+  <canvas id="stars"></canvas>
+  <main>
+    <div class="system" aria-hidden="true">
+      <div class="planet-outline"></div>
+      <div class="planet"></div>
+      <div class="orbit"></div>
+      <div class="orbit two"></div>
+    </div>
+
+    <span class="badge">Under Construction</span>
+    <h1>Cigna Universe</h1>
+    <p class="tagline">A whole new universe is being built, one star at a time. Launching soon.</p>
+
+    <div class="status" aria-live="polite">
+      <div class="status-row"><span id="phase">Igniting stars…</span><span id="pct">0%</span></div>
+      <div class="bar"><div class="fill" id="fill"></div></div>
+    </div>
+  </main>
+
+<script>
+  // Starfield
+  var c = document.getElementById("stars"), ctx = c.getContext("2d"), stars = [];
+  var still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function resize() {
+    c.width = innerWidth * devicePixelRatio; c.height = innerHeight * devicePixelRatio;
+    stars = [];
+    var n = Math.min(260, Math.floor(innerWidth * innerHeight / 4500));
+    for (var i = 0; i < n; i++) stars.push({
+      x: Math.random() * c.width, y: Math.random() * c.height,
+      r: Math.random() * 1.4 * devicePixelRatio + .3, t: Math.random() * 6.28, s: .01 + Math.random() * .03
+    });
+  }
+  function draw() {
+    ctx.clearRect(0, 0, c.width, c.height);
+    for (var i = 0; i < stars.length; i++) {
+      var s = stars[i]; s.t += s.s;
+      ctx.globalAlpha = .35 + .65 * Math.abs(Math.sin(s.t));
+      ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.28); ctx.fill();
+    }
+    if (!still) requestAnimationFrame(draw);
+  }
+  addEventListener("resize", function () { resize(); if (still) draw(); });
+  resize(); draw();
+
+  // Build progress that cycles through phases
+  var phases = ["Igniting stars…", "Charting galaxies…", "Aligning orbits…", "Terraforming planets…", "Calibrating gravity…", "Final systems check…"];
+  var p = 0, k = 0;
+  function tick() {
+    p = Math.min(p + Math.random() * 9 + 3, 96);
+    document.getElementById("fill").style.width = p + "%";
+    document.getElementById("pct").textContent = Math.floor(p) + "%";
+    document.getElementById("phase").textContent = phases[Math.min(Math.floor(p / 17), phases.length - 1)];
+    if (p >= 96) setTimeout(function () { p = 0; tick(); }, 2500);
+    else setTimeout(tick, 900);
+  }
+  tick();
+</script>
+</body>
+</html>

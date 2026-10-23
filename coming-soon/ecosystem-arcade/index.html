@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ecosystem Arcade · Level Loading</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #12061f;
+    --grid: #ff2bd6;
+    --neon: #39ff88;
+    --yellow: #ffe14d;
+    --cyan: #33e1ff;
+    --text: #f4ecff;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0; overflow: hidden;
+    background: var(--bg); color: var(--text);
+    font-family: "Press Start 2P", ui-monospace, monospace;
+  }
+
+  /* Synthwave grid floor */
+  .floor {
+    position: fixed; left: -50%; right: -50%; bottom: -10%; height: 55%;
+    background:
+      linear-gradient(transparent 0 95%, var(--grid) 95%) 0 0 / 100% 40px,
+      linear-gradient(90deg, transparent 0 97%, var(--grid) 97%) 0 0 / 40px 100%;
+    transform: perspective(300px) rotateX(60deg);
+    transform-origin: top center;
+    opacity: .45;
+    animation: drive 1.2s linear infinite;
+    mask-image: linear-gradient(transparent, #000 40%);
+    -webkit-mask-image: linear-gradient(transparent, #000 40%);
+  }
+  @keyframes drive { to { background-position: 0 40px, 0 0; } }
+  .sun {
+    position: fixed; left: 50%; bottom: 40%; width: 260px; height: 130px; margin-left: -130px;
+    border-radius: 130px 130px 0 0;
+    background: repeating-linear-gradient(180deg, #ffb84d 0 14px, transparent 14px 18px), linear-gradient(#ffe14d, #ff2bd6);
+    background-blend-mode: multiply;
+    opacity: .35; filter: blur(.5px);
+  }
+
+  /* CRT scanlines */
+  .crt {
+    position: fixed; inset: 0; pointer-events: none; z-index: 5;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,.25) 0 1px, transparent 1px 3px);
+  }
+
+  main {
+    position: relative; z-index: 2;
+    min-height: 100%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 32px 16px; text-align: center;
+  }
+
+  .tape {
+    padding: 8px 14px; margin-bottom: 26px;
+    background: repeating-linear-gradient(-45deg, var(--yellow) 0 14px, #111 14px 28px);
+    color: #111; font-size: .55rem;
+  }
+  .tape span { background: var(--yellow); padding: 4px 8px; }
+
+  h1 {
+    margin: 0 0 10px;
+    font-size: clamp(1.4rem, 6vw, 2.8rem); line-height: 1.35;
+    color: var(--neon);
+    text-shadow: 0 0 8px var(--neon), 3px 3px 0 #ff2bd6;
+  }
+  .sub { margin: 0 0 30px; font-size: clamp(.6rem, 2.4vw, .85rem); color: var(--cyan); line-height: 1.8; }
+
+  /* Pixel runner on loading bar */
+  .loader { width: min(420px, 100%); margin-bottom: 26px; }
+  .label { display: flex; justify-content: space-between; font-size: .6rem; margin-bottom: 10px; }
+  .track {
+    position: relative; height: 22px;
+    border: 3px solid var(--text); padding: 3px;
+  }
+  .blocks {
+    height: 100%; width: 0;
+    background: repeating-linear-gradient(90deg, var(--neon) 0 12px, transparent 12px 16px);
+    transition: width .3s steps(4);
+  }
+  .runner {
+    position: absolute; top: -26px; left: 0;
+    width: 20px; height: 20px; image-rendering: pixelated;
+    transition: left .3s steps(4);
+  }
+
+  .press {
+    font-size: clamp(.7rem, 2.8vw, .95rem); color: var(--yellow);
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .coin-btn {
+    margin-top: 28px;
+    font: inherit; font-size: .6rem; color: var(--bg);
+    background: var(--yellow); border: 0; padding: 12px 16px; cursor: pointer;
+    box-shadow: 4px 4px 0 #ff2bd6;
+  }
+  .coin-btn:active { transform: translate(4px, 4px); box-shadow: none; }
+  .credits { margin-top: 14px; font-size: .55rem; color: var(--text); opacity: .8; min-height: 1.6em; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+  <div class="sun" aria-hidden="true"></div>
+  <div class="floor" aria-hidden="true"></div>
+  <div class="crt" aria-hidden="true"></div>
+
+  <main>
+    <div class="tape"><span>UNDER CONSTRUCTION</span></div>
+    <h1>ECOSYSTEM<br>ARCADE</h1>
+    <p class="sub">NEW LEVELS BEING BUILT.<br>CHECK BACK SOON!</p>
+
+    <div class="loader">
+      <div class="label"><span>LOADING LEVEL 1</span><span id="pct">0%</span></div>
+      <div class="track">
+        <svg class="runner" id="runner" viewBox="0 0 10 10" shape-rendering="crispEdges" aria-hidden="true">
+          <rect x="3" y="0" width="4" height="3" fill="#ffe14d"/>
+          <rect x="4" y="1" width="1" height="1" fill="#12061f"/>
+          <rect x="2" y="3" width="6" height="4" fill="#33e1ff"/>
+          <rect x="1" y="4" width="1" height="2" fill="#ffe14d"/>
+          <rect x="8" y="4" width="1" height="2" fill="#ffe14d"/>
+          <rect x="2" y="7" width="2" height="3" fill="#ff2bd6" id="legA"/>
+          <rect x="6" y="7" width="2" height="3" fill="#ff2bd6" id="legB"/>
+        </svg>
+        <div class="blocks" id="blocks"></div>
+      </div>
+    </div>
+
+    <div class="press">PRESS START… SOON</div>
+
+    <button class="coin-btn" id="coin">INSERT COIN</button>
+    <div class="credits" id="credits" aria-live="polite"></div>
+  </main>
+
+<script>
+  // Loading bar with a running pixel character
+  var p = 0, step = 0;
+  var blocks = document.getElementById("blocks"), runner = document.getElementById("runner");
+  var legA = document.getElementById("legA"), legB = document.getElementById("legB");
+  function tick() {
+    p = p >= 99 ? 0 : Math.min(p + Math.floor(Math.random() * 6) + 1, 99);
+    blocks.style.width = p + "%";
+    runner.style.left = "calc(" + p + "% - " + (p * 0.2) + "px)";
+    document.getElementById("pct").textContent = p + "%";
+    step = 1 - step;
+    legA.setAttribute("y", step ? 7 : 8); legB.setAttribute("y", step ? 8 : 7);
+    setTimeout(tick, p >= 99 ? 1800 : 350);
+  }
+  tick();
+
+  // Insert coin easter egg
+  var credits = 0;
+  var lines = ["CREDIT 1. NOT YET, PLAYER!", "CREDIT 2. EAGER, HUH?", "CREDIT 3. SAVING THESE FOR LAUNCH", "HIGH SCORE: PATIENCE"];
+  document.getElementById("coin").addEventListener("click", function () {
+    credits++;
+    document.getElementById("credits").textContent = credits <= lines.length ? lines[credits - 1] : "CREDITS: " + credits + " (WOW)";
+  });
+</script>
+</body>
+</html>

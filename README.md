@@ -9,6 +9,6 @@ Static redirect links served by GitHub Pages.
 
 To change where a link goes, edit the `TARGET` line in its file and commit. Live in about a minute.
 
-`coming-soon/` is a placeholder page the links point to until they have a real target.
+`coming-soon/cigna-universe/` and `coming-soon/ecosystem-arcade/` are themed under-construction pages the links point to until they have a real target. `coming-soon/` is a generic fallback.
 
 QR codes for each link are in `qr/`. They encode the fixed link, so they never need regenerating when a target changes.
